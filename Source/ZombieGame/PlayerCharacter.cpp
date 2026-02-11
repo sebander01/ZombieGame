@@ -32,3 +32,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+/// <summary>
+/// A method to more the player forwards
+/// </summary>
+void APlayerCharacter::MoveDirection(FVector Direction, UMeshComponent* player)
+{
+	player->AddImpulse(Direction);
+}
+
