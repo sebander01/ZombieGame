@@ -27,7 +27,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomVariables-PlayerMovement")
+	float walkSpeed;
+
+	UCharacterMovementComponent* moveComp;
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerMovement")
-	void MoveDirection(FVector speed, UCharacterMovementComponent* Mov);
+	//Move in a direction given an FVector of direction and the players move componet.
+	void MoveDirection(FVector Direction);
 
 };

@@ -15,7 +15,9 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Get the move component and assign it to the moveComp variable to use throughout the project
+	moveComp = this->GetCharacterMovement();
 }
 
 // Called every frame
@@ -33,10 +35,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 }
 
 /// <summary>
-/// A method to more the player forwards
+/// A method to more the player forwards based on a FVector direction variable assigned in blueprint
 /// </summary>
-void APlayerCharacter::MoveDirection(FVector speed, UCharacterMovementComponent* Mov)
+void APlayerCharacter::MoveDirection(FVector Direction)
 {
-	Mov->AddForce(speed);
+	//Direction multiplied by the walk speed
+	moveComp->AddImpulse(Direction * walkSpeed);
 }
 
