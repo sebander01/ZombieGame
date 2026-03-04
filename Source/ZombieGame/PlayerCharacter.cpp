@@ -16,6 +16,17 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Getting the player controller
+	playerCon = GetWorld()->GetFirstPlayerController();
+
+	//If playerCon is valid
+	if (playerCon)
+	{
+		//Get the sub system for enhanced input and assign it the mapping context we are using and set it's priority to 0 so it's at the top
+		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerCon->GetLocalPlayer())->AddMappingContext(map_standardGameplay, 0);
+
+	}
+
 	//Get the move component and assign it to the moveComp variable to use throughout the project
 	moveComp = this->GetCharacterMovement();
 }
@@ -34,6 +45,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+#pragma region PlayerMovement/CameraMovement
 /// <summary>
 /// A method to more the player forwards based on a FVector direction variable assigned in blueprint
 /// </summary>
@@ -42,4 +54,19 @@ void APlayerCharacter::MoveDirection(FVector Direction)
 	//Direction multiplied by the walk speed
 	moveComp->AddImpulse(Direction * walkSpeed);
 }
+
+/// <summary>
+/// A method to handle first and third person camera based on the current mode
+/// </summary>
+/// <param name="cam"></param>
+void APlayerCharacter::CameraControls(UCameraComponent* cam)
+{
+	//Get mouse position
+	float x, y;
+	playerCon->GetMousePosition(x, y);
+
+	//Set the rotation of the camera based on the position of the mouse
+	cam->SetRelativeLocation(FVector(x, y, 0));
+}
+#pragma endregion
 

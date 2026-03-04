@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -30,10 +32,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomVariables-PlayerMovement")
 	float walkSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomVariables-Input")
+	UInputMappingContext* map_standardGameplay;
+
 	UCharacterMovementComponent* moveComp;
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerMovement")
 	//Move in a direction given an FVector of direction and the players move componet.
 	void MoveDirection(FVector Direction);
 
+	UFUNCTION(BlueprintCallable, Category = "CameraMovement")
+
+	/// <summary>
+	/// A method to handle first and third person camera based on the current mode
+	/// </summary>
+	/// <param name="cam"></param>
+	void CameraControls(UCameraComponent* cam);
+
+private:
+	APlayerController* playerCon;
 };
