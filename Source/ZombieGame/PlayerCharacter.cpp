@@ -59,7 +59,7 @@ void APlayerCharacter::MoveDirection(FVector Direction)
 /// A method to handle first and third person camera based on the current mode
 /// </summary>
 /// <param name="cam"></param>
-void APlayerCharacter::CameraControls(UCameraComponent* cam)
+void APlayerCharacter::CameraControls(UCameraComponent* cam, float maxX, float minX, float maxY, float minY, float speed, bool debug)
 {
 	//Get mouse position
 	float x, y;
@@ -73,8 +73,36 @@ void APlayerCharacter::CameraControls(UCameraComponent* cam)
 	float centeredX = x - (sizeX / 2.0f);
 	float centeredY = y - (sizeY / 2.0f);
 
+	//Verables for the final output
+	FVector2D finalOutput;
+
+	//Setting with data from the current output in case neither are adjusted
+	finalOutput.X = cam->GetRelativeRotation().Yaw;
+	finalOutput.Y = cam->GetRelativeRotation().Pitch;
+
+	//Debug
+	if (debug)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("Centered X: %f"), centeredX));
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Purple, FString::Printf(TEXT("Centered Y: %f"), centeredY));
+	}
+
+	//If between the max and min x
+	if (centeredX <= maxX && centeredX >= minX)
+	{
+		//Adjust speed by delta time * speed to handle camera speed
+		finalOutput.X = centeredX + (speed * GetWorld()->DeltaTimeSeconds);
+	}
+
+	//If between the max and min y
+	if (centeredY <= maxY && centeredY >= minY)
+	{
+		//Adjust speed by delta time * speed to handle camera speed
+		finalOutput.Y = centeredY + (speed * GetWorld()->DeltaTimeSeconds);
+	}
+
 	//Set the rotation of the camera based on the position of the mouse
-	cam->SetRelativeRotation(FRotator(centeredY, centeredX, 0));
+	cam->SetRelativeRotation(FRotator(finalOutput.Y, finalOutput.X, cam->GetRelativeRotation().Roll));
 }
 #pragma endregion
 

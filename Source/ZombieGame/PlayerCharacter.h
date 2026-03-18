@@ -47,7 +47,7 @@ public:
 	/// A method to handle first and third person camera based on the current mode
 	/// </summary>
 	/// <param name="cam"></param>
-	void CameraControls(UCameraComponent* cam);
+	void CameraControls(UCameraComponent* cam, float maxX, float minX, float maxY, float minY, float speed, bool debug);
 
 private:
 	APlayerController* playerCon;
