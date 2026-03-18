@@ -65,8 +65,16 @@ void APlayerCharacter::CameraControls(UCameraComponent* cam)
 	float x, y;
 	playerCon->GetMousePosition(x, y);
 
+	//Get screen size
+	int sizeX, sizeY;
+	playerCon->GetViewportSize(sizeX, sizeY);
+
+	//Center to middle
+	float centeredX = x - (sizeX / 2.0f);
+	float centeredY = y - (sizeY / 2.0f);
+
 	//Set the rotation of the camera based on the position of the mouse
-	cam->SetRelativeLocation(FVector(x, y, 0));
+	cam->SetRelativeRotation(FRotator(centeredY, centeredX, 0));
 }
 #pragma endregion
 
