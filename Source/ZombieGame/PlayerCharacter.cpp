@@ -61,6 +61,7 @@ void APlayerCharacter::MoveDirection(FVector Direction)
 /// <param name="cam"></param>
 void APlayerCharacter::CameraControls(UCameraComponent* cam, float maxX, float minX, float maxY, float minY, float speed, bool debug)
 {
+#pragma region camera
 	//Get mouse position
 	float x, y;
 	playerCon->GetMousePosition(x, y);
@@ -91,18 +92,34 @@ void APlayerCharacter::CameraControls(UCameraComponent* cam, float maxX, float m
 	if (centeredX <= maxX && centeredX >= minX)
 	{
 		//Adjust speed by delta time * speed to handle camera speed
-		finalOutput.X = centeredX + (speed * GetWorld()->DeltaTimeSeconds);
+		finalOutput.X = centeredX / speed;
 	}
 
 	//If between the max and min y
 	if (centeredY <= maxY && centeredY >= minY)
 	{
 		//Adjust speed by delta time * speed to handle camera speed
-		finalOutput.Y = centeredY + (speed * GetWorld()->DeltaTimeSeconds);
+		finalOutput.Y = centeredY / speed;
 	}
 
 	//Set the rotation of the camera based on the position of the mouse
 	cam->SetRelativeRotation(FRotator(finalOutput.Y, finalOutput.X, cam->GetRelativeRotation().Roll));
+#pragma endregion
+
+#pragma region movement
+	//If output is bigger then the max of x
+	if (centeredX > maxX)
+	{
+		//Turn left
+		this->SetActorRelativeRotation(FRotator(moveComp->GetActorTransform().GetRotation().Y, moveComp->GetActorTransform().GetRotation().X + turnSpeed, moveComp->GetActorTransform().GetRotation().W));
+	}
+	//if output is lower then the minimum of x
+	else if (centeredX < minX)
+	{
+		//Turn right
+		this->SetActorRelativeRotation(FRotator(moveComp->GetActorTransform().GetRotation().Y, moveComp->GetActorTransform().GetRotation().X - turnSpeed, moveComp->GetActorTransform().GetRotation().W));
+	}
+#pragma endregion
 }
 #pragma endregion
 

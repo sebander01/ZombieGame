@@ -31,6 +31,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomVariables-PlayerMovement")
 	float walkSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="CustomVariables-PlayerMovement")
+	float turnSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomVariables-Input")
 	UInputMappingContext* map_standardGameplay;
